@@ -31,3 +31,17 @@ echo 'TFA_NAME="<token name registered in 2fa>"' >>.env
 # Optional if openconnect fails requiring a server fingerprint
 echo 'SERVER_CERT="<server SHA1 fingerprint>"' >>.env
 ```
+
+To use SAML instead user/pass/2fa, just install:
+
+```
+brew install lkrms/misc/gp-saml-gui
+```
+
+And set:
+
+```
+cd vpnmac
+echo 'VPN_HOST="<my.vpn.host>"' >>.env
+echo 'SAML_AUTH="true"' >>.env
+```

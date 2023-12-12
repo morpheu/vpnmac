@@ -8,6 +8,7 @@ PASSWORD=""
 TFA_NAME=""
 VPN_HOST=""
 SERVER_CERT=""
+SAML_AUTH=""
 
 function startup() {
     SOURCE="${BASH_SOURCE[0]}"
@@ -80,7 +81,11 @@ function start() {
     fi
 
     set +e
-    sudo openconnect -v ${server_cert_arg} --dump-http-traffic --usergroup gateway --non-inter --protocol=gp $VPN_HOST -u $USER --passwd-on-stdin <<<${full_password}
+    if [[ $SAML_AUTH != "" ]]; then
+        gp-saml-gui $VPN_HOST --allow-insecure-crypto -q | grep COOKIE= | sed s/COOKIE=// | sudo openconnect --protocol=gp '--useragent=PAN GlobalProtect' --user=$USER --os=linux-64 --usergroup=portal:prelogin-cookie --passwd-on-stdin $VPN_HOST
+    else
+        sudo openconnect -v ${server_cert_arg} --dump-http-traffic --usergroup gateway --non-inter --protocol=gp $VPN_HOST -u $USER --passwd-on-stdin <<<${full_password}
+    fi
     exit_status=$?
     set -e
     if [[ "$__resultvar" != "" ]]; then
