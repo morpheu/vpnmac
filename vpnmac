@@ -82,7 +82,7 @@ function start() {
 
     set +e
     if [[ $SAML_AUTH != "" ]]; then
-        gp-saml-gui $VPN_HOST --allow-insecure-crypto -q | grep COOKIE= | sed s/COOKIE=// | sudo openconnect --protocol=gp '--useragent=PAN GlobalProtect' --user=$USER --os=linux-64 --usergroup=portal:prelogin-cookie --passwd-on-stdin $VPN_HOST
+        gp-saml-gui ${VPN_HOST} --allow-insecure-crypto -q -S
     else
         sudo openconnect -v ${server_cert_arg} --dump-http-traffic --usergroup gateway --non-inter --protocol=gp $VPN_HOST -u $USER --passwd-on-stdin <<<${full_password}
     fi
